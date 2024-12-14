@@ -2,10 +2,13 @@ use crate::engine::Engine;
 
 pub struct Utf8Engine {}
 
-impl Engine for Utf8Engine 
+impl Engine for Utf8Engine
 {
     fn get_name() -> String { "UTF-8".to_string() }
-    fn encode(string: &str) -> Vec<u8> { Vec::from(string.as_bytes()) }
+    fn encode(string: &str) -> Option<Vec<u8>>
+    {
+        Some(Vec::from(string.as_bytes()))
+    }
     fn decode(bytes: &[u8]) -> String
     {
         String::from_utf8_lossy(bytes) // Cow<'_, str>
@@ -19,10 +22,10 @@ mod tests {
 
     #[test]
     fn encode() {
-        let encoded = Utf8Engine::encode("Hello");
+        let encoded = Utf8Engine::encode("Hello").unwrap();
         assert_eq!(encoded, &[0x48, 0x65, 0x6c, 0x6c, 0x6f]);
 
-        let encoded = Utf8Engine::encode("é");
+        let encoded = Utf8Engine::encode("é").unwrap();
         // U+00E9
         // => 1110 1001
         // => 000011 101001
@@ -31,7 +34,7 @@ mod tests {
         // => c3 a9
         assert_eq!(encoded, &[0xc3, 0xa9]);
 
-        let encoded = Utf8Engine::encode("€");
+        let encoded = Utf8Engine::encode("€").unwrap();
         // U+20AC
         // => 0010 0000 1010 1100
         // => 0010 000010 101100
@@ -40,7 +43,7 @@ mod tests {
         // => e2 82 ac
         assert_eq!(encoded, &[0xe2, 0x82, 0xac]);
 
-        let encoded = Utf8Engine::encode("😀");
+        let encoded = Utf8Engine::encode("😀").unwrap();
         // U+1F600
         // => 1 1111 0110 0000 0000
         // => 011111 011000 000000
