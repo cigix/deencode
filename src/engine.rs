@@ -1,6 +1,6 @@
 pub trait Engine
 {
-    fn get_name() -> String;
-    fn encode(string: &str) -> Option<Vec<u8>>;
-    fn decode(bytes: &[u8]) -> String;
+    fn get_name(&self) -> String;
+    fn encode(&self, string: &str) -> Option<Vec<u8>>;
+    fn decode(&self, bytes: &[u8]) -> String;
 }

@@ -4,12 +4,12 @@ pub struct Utf8Engine {}
 
 impl Engine for Utf8Engine
 {
-    fn get_name() -> String { "UTF-8".to_string() }
-    fn encode(string: &str) -> Option<Vec<u8>>
+    fn get_name(&self) -> String { "UTF-8".to_string() }
+    fn encode(&self, string: &str) -> Option<Vec<u8>>
     {
         Some(Vec::from(string.as_bytes()))
     }
-    fn decode(bytes: &[u8]) -> String
+    fn decode(&self, bytes: &[u8]) -> String
     {
         String::from_utf8_lossy(bytes) // Cow<'_, str>
             .into_owned() // &str
@@ -22,10 +22,12 @@ mod tests {
 
     #[test]
     fn encode() {
-        let encoded = Utf8Engine::encode("Hello").unwrap();
+        let engine = Utf8Engine{};
+
+        let encoded = engine.encode("Hello").unwrap();
         assert_eq!(encoded, &[0x48, 0x65, 0x6c, 0x6c, 0x6f]);
 
-        let encoded = Utf8Engine::encode("é").unwrap();
+        let encoded = engine.encode("é").unwrap();
         // U+00E9
         // => 1110 1001
         // => 000011 101001
@@ -34,7 +36,7 @@ mod tests {
         // => c3 a9
         assert_eq!(encoded, &[0xc3, 0xa9]);
 
-        let encoded = Utf8Engine::encode("€").unwrap();
+        let encoded = engine.encode("€").unwrap();
         // U+20AC
         // => 0010 0000 1010 1100
         // => 0010 000010 101100
@@ -43,7 +45,7 @@ mod tests {
         // => e2 82 ac
         assert_eq!(encoded, &[0xe2, 0x82, 0xac]);
 
-        let encoded = Utf8Engine::encode("😀").unwrap();
+        let encoded = engine.encode("😀").unwrap();
         // U+1F600
         // => 1 1111 0110 0000 0000
         // => 011111 011000 000000
@@ -56,10 +58,12 @@ mod tests {
     #[test]
     fn decode()
     {
-        let decoded = Utf8Engine::decode(&[0x77, 0x6f, 0x72, 0x6c, 0x64, 0x21]);
+        let engine = Utf8Engine{};
+
+        let decoded = engine.decode(&[0x77, 0x6f, 0x72, 0x6c, 0x64, 0x21]);
         assert_eq!(decoded, "world!");
 
-        let decoded = Utf8Engine::decode(&[0xc3, 0xa8]);
+        let decoded = engine.decode(&[0xc3, 0xa8]);
         // c3 a8
         // => 110_00011 10_101000
         // => Leading2(00011) Continuation(101000)
@@ -68,7 +72,7 @@ mod tests {
         // => U+00E8
         assert_eq!(decoded, "è");
 
-        let decoded = Utf8Engine::decode(&[0xe2, 0x82, 0xa4]);
+        let decoded = engine.decode(&[0xe2, 0x82, 0xa4]);
         // e2 82 a4
         // => 1110_0010 10_000010 10_100100
         // => Leading3(0010) Continuation(000010) Continuation(100100)
