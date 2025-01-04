@@ -10,6 +10,8 @@
 
 use crate::engine::*;
 
+use std::fmt;
+
 use serde::Serialize;
 
 /// An encoding step.
@@ -120,6 +122,34 @@ impl EncodeNode
             self.decoders.remove(i);
         }
     }
+
+    /// Format the subtree with box drawings, recursively. This method is called
+    /// by `DeencodeTree::fmt`.
+    fn box_drawings(&self, prefix: &str, f: &mut fmt::Formatter<'_>)
+        -> fmt::Result
+    {
+        write!(f, "encoded as {} is", self.name)?;
+        for x in &self.output
+        {
+            write!(f, " {:X}", x)?;
+        }
+        if 1 < self.decoders.len()
+        {
+            for i in 0..self.decoders.len() - 1
+            {
+                write!(f, "{}├╴", prefix)?;
+                let subprefix = String::from(prefix) + "│ ";
+                self.decoders[i].box_drawings(&subprefix, f)?;
+            }
+        }
+        if let Some(decoder) = self.decoders.last()
+        {
+            write!(f, "{}└╴", prefix)?;
+            let subprefix = String::from(prefix) + "  ";
+            decoder.box_drawings(&subprefix, f)?;
+        }
+        Ok(())
+    }
 }
 
 impl DecodeNode
@@ -199,6 +229,30 @@ impl DecodeNode
             self.encoders.remove(i);
         }
     }
+
+    /// Format the subtree with box drawings, recursively. This method is called
+    /// by `DeencodeTree::fmt`.
+    fn box_drawings(&self, prefix: &str, f: &mut fmt::Formatter<'_>)
+        -> fmt::Result
+    {
+        write!(f, "decoded as {} is \"{}\"", self.name, self.output)?;
+        if 1 < self.encoders.len()
+        {
+            for i in 0..self.encoders.len() - 1
+            {
+                write!(f, "{}├╴", prefix)?;
+                let subprefix = String::from(prefix) + "│ ";
+                self.encoders[i].box_drawings(&subprefix, f)?;
+            }
+        }
+        if let Some(encoder) = self.encoders.last()
+        {
+            write!(f, "{}└╴", prefix)?;
+            let subprefix = String::from(prefix) + "  ";
+            encoder.box_drawings(&subprefix, f)?;
+        }
+        Ok(())
+    }
 }
 
 impl DeencodeTree
@@ -254,5 +308,35 @@ impl DeencodeTree
         }
 
         (known_strings, known_bytes)
+    }
+
+    /// Format the tree with box drawings, recursively.
+    pub fn box_drawings(&self, f: &mut fmt::Formatter<'_>)
+        -> fmt::Result
+    {
+        write!(f, "The string \"{}\"", self.input)?;
+        if 1 < self.encoders.len()
+        {
+            for i in 0..self.encoders.len() - 1
+            {
+                write!(f, "\n├╴")?;
+                self.encoders[i].box_drawings("\n│ ", f)?;
+            }
+        }
+        if let Some(encoder) = self.encoders.last()
+        {
+            write!(f, "\n└╴")?;
+            encoder.box_drawings("\n  ", f)?;
+        }
+        Ok(())
+    }
+}
+
+impl fmt::Display for DeencodeTree
+{
+    /// Format the tree with box drawings, recursively.
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result
+    {
+        self.box_drawings(f)
     }
 }

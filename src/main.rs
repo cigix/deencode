@@ -8,5 +8,6 @@ fn main()
 
     let _ = tree.deduplicate();
 
-    println!("{}", serde_json::to_string(&tree).unwrap());
+    //println!("{}", serde_json::to_string(&tree).unwrap());
+    println!("{}", tree);
 }
