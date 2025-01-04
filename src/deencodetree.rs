@@ -131,7 +131,7 @@ impl EncodeNode
         write!(f, "encoded as {} is", self.name)?;
         for x in &self.output
         {
-            write!(f, " {:X}", x)?;
+            write!(f, " {:02X}", x)?;
         }
         if 1 < self.decoders.len()
         {
