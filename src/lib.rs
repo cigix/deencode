@@ -1,6 +1,7 @@
 pub mod deencodetree;
 pub mod engine;
 pub mod latin1engine;
+pub mod utf7engine;
 pub mod utf8engine;
 
 pub use engine::Engine;
@@ -8,6 +9,8 @@ pub use deencodetree::DeencodeTree;
 
 /// Provided engine for Latin-1 / ISO-8859-1 / Codepage 1252.
 pub static LATIN1: latin1engine::Latin1Engine = latin1engine::Latin1Engine {};
+/// Provided engine for UTF-7.
+pub static UTF7: utf7engine::Utf7Engine = utf7engine::Utf7Engine {};
 /// Provided engine for UTF-8.
 pub static UTF8: utf8engine::Utf8Engine = utf8engine::Utf8Engine {};
 
