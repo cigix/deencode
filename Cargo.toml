@@ -2,6 +2,10 @@
 name = "deencode"
 version = "0.1.0"
 edition = "2024"
+description = "Reverse engineer encoding errors"
+repository = "https://github.com/cigix/deencode"
+license = "GPL-3.0-or-later"
+keywords = ["encoding", "unicode"]
 
 [dependencies]
 encoding_rs = "0.8.35"
