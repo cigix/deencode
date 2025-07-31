@@ -1,3 +1,43 @@
+//! # Deencode: Reverse engineer encoding errors
+//!
+//! The goal of this crate is to automatically explore the result of
+//! successively encoding then decoding a string using different encoding
+//! schemes, which usually results in some corruption of the non-ASCII
+//! characters.
+//!
+//! ## Concepts
+//!
+//! * [Engines](engine/trait.Engine.html) are objects that represent an encoding
+//!   scheme, and can be used to encode (String to bytes) or decode (bytes to
+//!   String). A number of engines are already implemented into this crate, with
+//!   static instances if you want to use them.
+//! * The structure of deencoding is a
+//!   [tree](deencodetree/struct.DeencodeTree.html): from an input string, every
+//!   engine may give an encoding, then every engine gives a decoding of that
+//!   encoding, and so on.
+//!
+//! > _Note_: The deencoding process is not optimised to avoid doing the same
+//! > steps over and over. It is recommended to keep the depth to small numbers.
+//! > Deduplication can then be applied to remove duplication in the tree.
+//!
+//! ## Usage
+//!
+//! ```rust
+//! use deencode::*;
+//!
+//! // List the engines to use.
+//! let engines: Vec<&dyn Engine> = vec![&UTF8, &LATIN1, &MIXED816BE, &MIXED816LE, &UTF7];
+//! // Explore the tree of possible encodings and decodings.
+//! let mut tree = deencode("Clément", &engines, 1);
+//! // Remove duplicate entries from the tree.
+//! let _ = tree.deduplicate();
+//!
+//! // Export the tree with box drawings.
+//! println!("{}", tree);
+//! // Export the tree as JSON.
+//! println!("{}", serde_json::to_string(&tree).unwrap());
+//! ```
+
 pub mod deencodetree;
 pub mod engine;
 pub mod latin1engine;

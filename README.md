@@ -23,7 +23,10 @@ to get back a
 [tree](https://docs.rs/deencode/latest/deencode/deencodetree/struct.DeencodeTree.html)
 of possible sequences of encodings and decodings, and then work on that tree.
 
-# Example usage
+This crate is published on [crates.io](https://crates.io/crates/deencode); with
+documentation at [docs.rs](https://docs.rs/deencode/latest/deencode/).
+
+## Example usage
 
 ```rust
 // List the engines to use.
