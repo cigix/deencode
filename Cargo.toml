@@ -1,6 +1,6 @@
 [package]
 name = "deencode"
-version = "1.0.1"
+version = "1.0.2"
 edition = "2024"
 description = "Reverse engineer encoding errors"
 repository = "https://github.com/cigix/deencode"

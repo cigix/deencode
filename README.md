@@ -41,6 +41,12 @@ println!("{}", tree);
 println!("{}", serde_json::to_string(&tree).unwrap());
 ```
 
+The provided executable does a 1-level deencoding using all engines, and prints
+the tree using box drawings, on each argument:
+```
+$ deencode Clément ミク
+```
+
 # Some additional reading
 * https://mas.to/@yournameisinvalid
 * https://www.kalzumeus.com/2010/06/17/falsehoods-programmers-believe-about-names/
