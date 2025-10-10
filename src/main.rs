@@ -5,10 +5,9 @@ fn main()
     let engines: Vec<&dyn Engine> = vec![
         &UTF8, &LATIN1, &MIXED816BE, &MIXED816LE, &UTF7];
 
-    let mut tree = deencode("Clément", &engines, 1);
-
-    let _ = tree.deduplicate();
-
-    //println!("{}", serde_json::to_string(&tree).unwrap());
-    println!("{}", tree);
+    for arg in std::env::args().skip(1) {
+        let mut tree = deencode(&arg, &engines, 1);
+        let _ = tree.deduplicate();
+        println!("{}", tree);
+    }
 }
