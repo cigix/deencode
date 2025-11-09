@@ -41,7 +41,7 @@ println!("{}", tree);
 println!("{}", serde_json::to_string(&tree).unwrap());
 ```
 
-The provided executable does a 1-level deencoding using all engines, and prints
+The provided executable does a 1-level deencoding using most engines, and prints
 the tree using box drawings, on each argument:
 ```
 $ deencode Clément ミク
