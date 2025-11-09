@@ -42,6 +42,7 @@ pub mod deencodetree;
 pub mod engine;
 pub mod cp1253engine;
 pub mod cp1254engine;
+pub mod cp1255engine;
 pub mod latin1engine;
 pub mod latin2engine;
 pub mod mixed816beengine;
@@ -56,6 +57,8 @@ pub use deencodetree::DeencodeTree;
 pub static CP1253: cp1253engine::CP1253Engine = cp1253engine::CP1253Engine {};
 /// Provided engine ISO-8859-9 / Codepage 1254.
 pub static CP1254: cp1254engine::CP1254Engine = cp1254engine::CP1254Engine {};
+/// Provided engine ISO-8859-8 / Codepage 1255.
+pub static CP1255: cp1255engine::CP1255Engine = cp1255engine::CP1255Engine {};
 /// Provided engine for Latin-1 / ISO-8859-1 / Codepage 1252.
 pub static LATIN1: latin1engine::Latin1Engine = latin1engine::Latin1Engine {};
 /// Provided engine for Latin-2 / ISO-8859-2 / Codepage 1250.
